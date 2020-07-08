@@ -3,13 +3,13 @@ from .models import Post, Category
 
 
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('blog_title', 'id', 'category', 'date_published')
+    list_display = ('blog_title', 'id', 'category', 'date_published', 'author')
     list_filter = ('category',)
     search_fields = ('blog_title', 'date_published')
 
     fieldsets = (
         (None, {
-            'fields': ('blog_title', 'description', 'category')
+            'fields': ('blog_title', 'description', 'category', 'author')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
