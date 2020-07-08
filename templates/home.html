@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+<html>
 <head>
     <title>Home</title>
 </head>
 <body>
     {% for title in blog %}
-        <a href="{% url 'blog:index' title.id  %}"><h3>{{ title.blog_title }}</h3></a>
+        <a href="blog/{{ title.id }}"><h3>{{ title.blog_title }}</h3></a>
     {% endfor %}
 </body>
 </html>
