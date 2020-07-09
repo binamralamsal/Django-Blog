@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Home</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}KodiBlog{% endblock %}
+{% block content %}
     {% for title in blog %}
         <a href="{% url 'blog:detail' title.id %}"><h3>{{ title.blog_title }} </h3></a>
     {% endfor %}
-
-</body>
-</html>
+{% endblock %}

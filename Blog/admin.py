@@ -17,7 +17,7 @@ class BlogAdmin(admin.ModelAdmin):
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('date_published',),
+            'fields': ('date_published', 'browser_title'),
         }),
     )
 
