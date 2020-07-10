@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
-    {% block title %}{{ Blog.browser_title }}{% endblock %}
+    {% block title %}
+        {% if post.browser_title|length < 1 %}
+            {{ post.blog_title }}
+        {% else %}
+            {{ post.browser_title }}
+        {% endif %}
+    {% endblock %}
     {% block style %}
         div.row>.col-md-4{
             color:grey;
