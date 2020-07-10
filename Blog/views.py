@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from .models import Post
 from django.views.generic import CreateView
+from .forms import PostForm
 
 
-# Create your views here.
 def index(request):
     return render(request, 'blog/index.html')
 
@@ -22,5 +22,6 @@ def detail(request, blog_id):
 
 class AddPostView(CreateView):
     model = Post
-    template_name = 'blog/Add Post.html'
-    fields = "__all__"
+    form_class = PostForm
+    template_name = 'blog/add_post.html'
+
