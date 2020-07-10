@@ -1,7 +1,24 @@
 {% extends 'base.html' %}
 {% block title %}KodiBlog{% endblock %}
+{% block home_class %}active{% endblock %}
 {% block content %}
-    {% for title in blog %}
-        <a href="{% url 'blog:detail' title.id %}"><h3>{{ title.blog_title }} </h3></a>
+    {% for post in object_list %}
+        <ul>
+            <li>
+                <a href="{% url 'blog:detail' post.id %}">
+                    {{ post.blog_title }}
+                    <small>
+                        <a href="{% url 'blog:update_post' post.pk%}" style="float: right; padding: 3px;">
+                            Edit
+                        </a>
+                        <a href="{% url 'blog:delete_post' post.pk%}" style="float: right; padding: 3px;">
+                             Delete
+                        </a>
+                    </small>
+                </a>
+                <br>
+                 {{ post.description }}
+            </li>
+        </ul>
     {% endfor %}
 {% endblock %}

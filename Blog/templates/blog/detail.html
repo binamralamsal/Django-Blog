@@ -6,22 +6,23 @@
         font-size:14px;
         }
     {% endblock %}
+{% block blog_class %}active{% endblock %}
     {% block content %}
-        <h2>{{ Blog.blog_title }}</h2>
+        <a href="{% url 'blog:home' %}" class="btn btn-primary" style="margin-bottom: 4px;">Back</a>
+        <a href="{% url 'blog:update_post' post.pk %}" class="btn btn-primary" style="margin-bottom: 4px; float: right;">Edit Post</a>
+        <h2>{{ post.blog_title }}</h2>
         <div class="row mt-4">
             <div class="col-md-4">
-                <p>Category: {{ Blog.category }}</p>
+                <p>Category: {{ post.category }}</p>
             </div>
             <div class="col-md-4">
-                <p>By: {{ Blog.author.get_full_name }}</p>
+                <p>By: {{ post.author.get_full_name }}</p>
             </div>
             <div class="col-md-4">
-                <p>Published Date: {{ Blog.date_published }}</p>
+                <p>Published Date: {{ post.date_published }}</p>
             </div>
         </div>
         <hr>
-        <p>{{ Blog.description }}</p>
-        <div class="mb-4">
-            <center><a href="{% url 'blog:home' %}" class="btn btn-primary" style="margin-bottom: 4px;">Back</a>
-        </div>
+        <p>{{ post.description }}</p>
+        <a href="{% url 'blog:delete_post' post.pk %}">Delete</a>
     {% endblock %}
