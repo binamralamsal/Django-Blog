@@ -1,2 +1,2 @@
+Python 3.8.3
 django==3.0.8 
-Python 3.8.3 

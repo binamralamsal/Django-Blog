@@ -12,6 +12,7 @@ class Post(models.Model):
     description = models.TextField(default="")
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default=1)
     date_published = models.DateField(default=timezone.now)
+    ordering_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.blog_title

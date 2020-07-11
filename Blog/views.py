@@ -12,14 +12,7 @@ def index(request):
 class HomeView(ListView):
     model = Post
     template_name = 'blog/home.html'
-    ordering = ['-id']
-
-
-def detail(request, blog_id):
-    blog = Post.objects.get(id=blog_id)
-    if blog.browser_title == "":
-        blog.browser_title = blog.blog_title
-    return render(request, 'blog/detail.html', {'Blog': blog})
+    ordering = ['-ordering_date']
 
 
 class PostDetailView(DetailView):
