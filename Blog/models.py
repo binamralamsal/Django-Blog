@@ -13,6 +13,8 @@ class Post(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default=1)
     date_published = models.DateField(default=timezone.now)
     ordering_date = models.DateTimeField(default=timezone.now)
+    slug = models.SlugField(max_length=250, unique_for_date='date_published')
+    excerpt = models.TextField(max_length=200, default="")
 
     def __str__(self):
         return self.blog_title

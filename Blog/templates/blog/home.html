@@ -5,7 +5,7 @@
     {% for post in object_list %}
         <ul>
             <li>
-                <a href="{% url 'blog:detail' post.id %}">
+                <a href="{% url 'blog:detail' post.slug post.pk %}">
                     {{ post.blog_title }}
                     <small>
                         <a href="{% url 'blog:update_post' post.pk%}" style="float: right; padding: 3px;">
