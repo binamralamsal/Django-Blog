@@ -1,10 +1,22 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import PostForm, UpdatePostForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .models import Category
+from django.http import HttpResponseRedirect
 
+
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    liked = False
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    return HttpResponseRedirect(reverse('blog:detail', args=[post.slug, post.pk]))
 
 class BlogIndex(ListView):
     model = Post
@@ -42,7 +54,8 @@ class UpdatePostView(UpdateView):
     template_name = 'blog/update_post.html'
 
 
-class DeletePostView(DeleteView):
-    model = Post
-    success_url = reverse_lazy('blog:home')
-    template_name = 'blog/delete_post.html'
+def delete_post(request, pk):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=pk)
+        post.delete()
+    return redirect("blog:home")

@@ -14,25 +14,77 @@
     {% endblock %}
 {% block blog_class %}active{% endblock %}
     {% block content %}
-        {% if user.id == post.author.id %}
             <a href="{% url 'blog:home' %}" class="btn btn-primary" style="margin-bottom: 4px;">Back</a>
-            <a href="{% url 'blog:update_post' post.pk %}" class="btn btn-primary" style="margin-bottom: 4px; float: right;">Edit Post</a>
+        {% if user.id == post.author.id %}
+            <a href="{% url 'blog:update_post' post.pk %}"
+               class="btn btn-primary"
+               style="
+               margin-bottom: 4px;
+               float: right;">
+                Edit Post
+            </a>
         {% endif %}
         <h2>{{ post.blog_title }}</h2>
         <div class="row mt-4">
-            <div class="col-md-4">
-                <p>Category: <a href="{% url "blog:category" post.category.slug %}">{{ post.category }}</a></p>
+            <div class="col-md-3">
+                <p>Category:
+                    {% for cat in post.category.all %}
+                        <a href="{% url "blog:category" cat|slugify %}">{{ cat }}</a>
+                    {% endfor %}
+
+                </p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <p>By: {{ post.author.get_full_name }}</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <p>Published Date: {{ post.date_published }}</p>
+        </div>
+            <div class="col-md-3">
+                <form action="{% url 'blog:like_post' post.pk %}" method="post">
+                    {% csrf_token %}
+                    {% if user.is_authenticated %}
+                        <button type="submit" class="btn btn-primary btn-sm" name="post_id" value="{{ post.id }}">
+                            {% if not user in post.likes.all %}
+                                Like
+                            {% else %}
+                                Unlike
+                            {% endif %}
+                        </button>
+                    {% endif %}
+                    {{ post.likes.count }} Likes
+                </form>
             </div>
         </div>
         <hr>
+
         <p>{{ post.description|safe }}</p>
         {% if user.id == post.author.id %}
-        <a href="{% url 'blog:delete_post' post.pk %}">Delete</a>
+            <form action="{% url "blog:delete_post" post.pk %}" method="post">
+            {% csrf_token %}
+            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deletePost">
+              Delete
+            </button>
+            <div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deletePostLabel">Delete Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Do you sure want to delete permanently? <br>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Delete Permanently</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </form>
+
         {% endif %}
     {% endblock %}

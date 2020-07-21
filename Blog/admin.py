@@ -6,20 +6,19 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('category', 'slug')
     prepopulated_fields = {'slug': ('category',)}
 
-
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('blog_title', 'id', 'category', 'date_published', 'author', 'slug')
+    list_display = ('blog_title', 'id', 'date_published', 'author', 'slug')
     list_filter = ('category',)
     search_fields = ('blog_title', 'date_published')
     prepopulated_fields = {'slug': ('blog_title',)}
 
     fieldsets = (
         (None, {
-            'fields': ('blog_title', 'description', 'category', 'author')
+            'fields': ('blog_title', 'description', 'author', 'category')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('date_published', 'browser_title', 'slug', 'excerpt'),
+            'fields': ('date_published', 'browser_title', 'slug', 'excerpt', 'likes'),
         }),
     )
 
