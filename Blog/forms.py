@@ -9,7 +9,8 @@ class PostForm(forms.ModelForm):
         widgets = {
             'blog_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your title here...'}),
             'browser_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your title to show in browser here... Leave blank to show blog title as browser title'}),
-            'author': forms.Select(attrs={'class': 'form-control'}),
+            # 'author': forms.Select(attrs={'class': 'form-control'}),
+            'author': forms.TextInput(attrs={'class': 'form-control', 'id': 'author', 'value': '', 'type': 'hidden'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter your description here...'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
             'slug': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your slug here without spaces that will be url of your blog...'}),

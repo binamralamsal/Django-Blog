@@ -2,7 +2,7 @@
 {% block title %}Delete Post{% endblock %}
 {% block blog_class %}active{% endblock %}
 {% block content %}
-    {% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
         <h4>Delete: {{ post.blog_title }}</h4>
         <hr>
         <strong>Post details:</strong>

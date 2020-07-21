@@ -14,14 +14,14 @@
     {% endblock %}
 {% block blog_class %}active{% endblock %}
     {% block content %}
-        {% if user.is_authenticated %}
+        {% if user.id == post.author.id %}
             <a href="{% url 'blog:home' %}" class="btn btn-primary" style="margin-bottom: 4px;">Back</a>
             <a href="{% url 'blog:update_post' post.pk %}" class="btn btn-primary" style="margin-bottom: 4px; float: right;">Edit Post</a>
         {% endif %}
         <h2>{{ post.blog_title }}</h2>
         <div class="row mt-4">
             <div class="col-md-4">
-                <p>Category: {{ post.category }}</p>
+                <p>Category: <a href="{% url "blog:category" post.category.slug %}">{{ post.category }}</a></p>
             </div>
             <div class="col-md-4">
                 <p>By: {{ post.author.get_full_name }}</p>
@@ -32,7 +32,7 @@
         </div>
         <hr>
         <p>{{ post.description|safe }}</p>
-        {% if user.is_authenticated %}
+        {% if user.id == post.author.id %}
         <a href="{% url 'blog:delete_post' post.pk %}">Delete</a>
         {% endif %}
     {% endblock %}

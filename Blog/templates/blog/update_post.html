@@ -2,7 +2,7 @@
 {% block title %}Edit Post{% endblock %}
 {% block blog_class %}active{% endblock %}
 {% block content %}
-    {% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
         <div class="form-group">
             <form method="POST">
                 {% csrf_token %}

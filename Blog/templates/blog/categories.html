@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-{% block title%}Blog{% endblock %}
-{% block blog_class %}active{% endblock %}
+{% block title %}KodiBlog{% endblock %}
+{{% block category_class %}active{% endblock %}
 {% block content %}
-    <center><h3>All Posts</h3></center>
-{% for post in object_list %}
+    {% if category %}
+        <h3>{{ category_name|title }}</h3>
+    {% for post in category %}
         <ul>
             <li>
                 <a href="{% url 'blog:detail' post.slug post.pk %}">
@@ -28,4 +29,7 @@
             </li>
         </ul>
     {% endfor %}
+    {% else %}
+        Sorry, Posts assigned with this category not found
+    {% endif %}
 {% endblock %}

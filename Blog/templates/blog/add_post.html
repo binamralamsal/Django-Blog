@@ -15,4 +15,8 @@
     {% else %}
         <p>You need to <a href="{% url "login" %}">login</a> or <a href="{% url "user_auth:register" %}">register</a> to continue adding posts</p>
     {% endif %}
+    <script>
+        var name = "{{ user.id }}";
+        document.getElementById("author").value = name;
+    </script>
 {% endblock %}

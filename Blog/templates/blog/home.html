@@ -7,15 +7,15 @@
             <li>
                 <a href="{% url 'blog:detail' post.slug post.pk %}">
                     {{ post.blog_title }}
-                   {% if user.is_authenticated %}
+                   {% if user.id == post.author.id %}
                         <small>
-                        <a href="{% url 'blog:update_post' post.pk%}" style="float: right; padding: 3px;">
-                            Edit
-                        </a>
-                        <a href="{% url 'blog:delete_post' post.pk%}" style="float: right; padding: 3px;">
-                             Delete
-                        </a>
-                    </small>
+                            <a href="{% url 'blog:update_post' post.pk%}" style="float: right; padding: 3px;">
+                                Edit
+                            </a>
+                            <a href="{% url 'blog:delete_post' post.pk%}" style="float: right; padding: 3px;">
+                                 Delete
+                            </a>
+                        </small>
                    {% endif %}
                 </a>
                 <br>
