@@ -14,8 +14,10 @@
     {% endblock %}
 {% block blog_class %}active{% endblock %}
     {% block content %}
-        <a href="{% url 'blog:home' %}" class="btn btn-primary" style="margin-bottom: 4px;">Back</a>
-        <a href="{% url 'blog:update_post' post.pk %}" class="btn btn-primary" style="margin-bottom: 4px; float: right;">Edit Post</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'blog:home' %}" class="btn btn-primary" style="margin-bottom: 4px;">Back</a>
+            <a href="{% url 'blog:update_post' post.pk %}" class="btn btn-primary" style="margin-bottom: 4px; float: right;">Edit Post</a>
+        {% endif %}
         <h2>{{ post.blog_title }}</h2>
         <div class="row mt-4">
             <div class="col-md-4">
@@ -29,6 +31,8 @@
             </div>
         </div>
         <hr>
-        <p>{{ post.description }}</p>
+        <p>{{ post.description|safe }}</p>
+        {% if user.is_authenticated %}
         <a href="{% url 'blog:delete_post' post.pk %}">Delete</a>
+        {% endif %}
     {% endblock %}

@@ -2,7 +2,8 @@
 {% block title %}Login{% endblock %}
 {% block login_class %}active{% endblock %}
 {% block content %}
-<div class="form-group">
+{% if not user.is_authenticated %}
+    <div class="form-group">
     <form method="POST">
         {% csrf_token %}
             {{ form.as_p }}
@@ -11,4 +12,7 @@
         </center>
     </form>
 </div>
+{% else %}
+    <p>You are already logged in.</p>
+{% endif %}
 {% endblock %}

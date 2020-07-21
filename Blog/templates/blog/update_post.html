@@ -2,13 +2,17 @@
 {% block title %}Edit Post{% endblock %}
 {% block blog_class %}active{% endblock %}
 {% block content %}
-    <div class="form-group">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <center>
-                <button class="btn btn-primary">Update</button>
-            </center>
-        </form>
-</div>
+    {% if user.is_authenticated %}
+        <div class="form-group">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <center>
+                    <button class="btn btn-primary">Update</button>
+                </center>
+            </form>
+        </div>
+    {% else %}
+        <p>You need to <a href="{% url "login" %}">login</a> with the creator of this blog to edit this blog post.</p>
+    {% endif %}
 {% endblock %}

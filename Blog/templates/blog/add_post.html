@@ -2,13 +2,17 @@
 {% block title %}Add Post{% endblock %}
 {% block add_post_class %}active{% endblock %}
 {% block content %}
-<div class="form-group">
-    <form method="POST">
-        {% csrf_token %}
-            {{ form.as_p }}
-        <center>
-            <button class="btn btn-primary">Post</button>
-        </center>
-    </form>
-</div>
+    {% if user.is_authenticated %}
+        <div class="form-group">
+            <form method="POST">
+                {% csrf_token %}
+                    {{ form.as_p }}
+                <center>
+                    <button class="btn btn-primary">Post</button>
+                </center>
+            </form>
+        </div>
+    {% else %}
+        <p>You need to <a href="{% url "login" %}">login</a> or <a href="{% url "user_auth:register" %}">register</a> to continue adding posts</p>
+    {% endif %}
 {% endblock %}

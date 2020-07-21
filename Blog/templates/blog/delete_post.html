@@ -2,21 +2,25 @@
 {% block title %}Delete Post{% endblock %}
 {% block blog_class %}active{% endblock %}
 {% block content %}
-    <h4>Delete: {{ post.blog_title }}</h4>
-    <hr>
-    <strong>Post details:</strong>
-    <p>id: {{ post.id }}</p>
-    <p>Published Date: {{ post.date_published }}</p>
-    <p>Category: {{ post.category }}</p>
-    <hr>
-    <strong>Are you sure want to delete?</strong> <br><br>
-    <div class="form-group">
-        <form method="POST">
-            {% csrf_token %}
-            <button class="btn btn-primary">Delete Permanently</button>
-        </form>
-    <small style="color:grey;">Note: Deleting the post is permanently and we will not save its backup.
-    If you delete it you can not restore it back so be sure to make a backup
-    of it before deleting</small>
-</div>
+    {% if user.is_authenticated %}
+        <h4>Delete: {{ post.blog_title }}</h4>
+        <hr>
+        <strong>Post details:</strong>
+        <p>id: {{ post.id }}</p>
+        <p>Published Date: {{ post.date_published }}</p>
+        <p>Category: {{ post.category }}</p>
+        <hr>
+        <strong>Are you sure want to delete?</strong> <br><br>
+        <div class="form-group">
+            <form method="POST">
+                {% csrf_token %}
+                <button class="btn btn-primary">Delete Permanently</button>
+            </form>
+            <small style="color:grey;">Note: Deleting the post is permanently and we will not save its backup.
+            If you delete it you can not restore it back so be sure to make a backup
+            of it before deleting</small>
+        </div>
+    {% else %}
+        <p>You need to <a href="{% url "login" %}">login</a> with the creator of this blog to edit this blog post.</p>
+    {% endif %}
 {% endblock %}
