@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+{% block register_class %}active{% endblock %}
+{% block profile_class %}active{% endblock %}
+{% block content %}
+    <div class="card mb-3" style="">
+     <div class="row no-gutters">
+    <div class="col-md-1 col-sm-6">
+        {% if profile.profile.profile_pic %}
+      <img src="{{ profile.profile.profile_pic.url }}" class="unselectable card-img rounded-circle" style="height: 100px; width:100px; object-fit: cover; margin-top: 5px; margin-left:5px; position:relative;" alt="...">
+            {% else %}
+      <img src="{% static  'blog/images/profile.png' %}" class="card-img rounded-circle" style="height: 50px; width:50px; object-fit: cover; margin-top: 10px; margin-left:10px; position:relative;" alt="...">
+        {% endif %}
+    </div>
+
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title" style="position:relative;">
+            {{ profile.get_full_name }}
+            {% if profile.profile.verified %}
+                <span class="material-icons unselectable" style="font-size: 20px; color:#00acee;" data-toggle="tooltip" data-placement="top" title="Verified">verified</span>
+            {% endif %}
+            {% if profile.is_staff %}
+                <span class="material-icons unselectable" unselectable="on" style="font-size: 20px; color:#00acee;" data-toggle="tooltip" data-placement="top" title="Admin">admin_panel_settings</span>
+            {% endif %}
+        </h5>
+        <p class="card-text">{{ profile.profile.bio }}</p>
+        <p class="card-text">
+            {% if profile.profile.website_url %}
+                <a href="{{ profile.profile.website_url }}" style="text-decoration: none">Website</a>
+            {% endif %}
+            {% if profile.profile.facebook %}
+                <a href="{{ profile.profile.facebook }}" style="text-decoration: none" class="fa fa-facebook"></a>
+            {% endif %}
+            {% if profile.profile.twitter %}
+                <a href="{{ profile.profile.twitter }}" class="fa fa-twitter"></a>
+            {% endif %}
+            {% if profile.profile.instagram %}
+                <a href="{{ profile.profile.instagram }}" class="fa fa-instagram">
+                </a>
+            {% endif %}
+            {% if profile.profile.youtube %}
+                <a href="{{ profile.profile.youtube }}" class="fa-youtube-play fa" style="text-decoration: none"></a>
+            {% endif %}
+            {% if profile.profile.telegram %}
+                <a href="{{ profile.profile.telegram }}" class="fa-telegram fa" style="text-decoration: none"></a>
+            {% endif %}
+            {% if profile.profile.pinterest %}
+                <a href="{{ profile.profile.pinterest }}" class="fa fa-pinterest"></a>
+            {% endif %}
+        <p class="text-muted card-text">Email: {{ profile.email }}</p>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+    <script>
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+    </script>
+{% endblock %}

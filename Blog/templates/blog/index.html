@@ -2,54 +2,5 @@
 {% block title%}Blog{% endblock %}
 {% block blog_class %}active{% endblock %}
 {% block content %}
-    <center><h3>All Posts</h3></center>
-{% for post in object_list %}
-        <ul>
-            <li>
-                <a href="{% url 'blog:detail' post.slug post.pk %}">
-                    {{ post.blog_title }}
-                   {% if user.id == post.author.id %}
-                        <small>
-                        <a href="{% url 'blog:update_post' post.pk%}" style="float: right; padding: 3px;">
-                            Edit
-                        </a>
-                            <a class="underline" style="float: right; padding: 3px; float: right; color: red; cursor:pointer;" data-toggle="modal" data-target="#deletePost">
-                              Delete
-                            </a>
-                        <form style="display: inline; float: right;" action="{% url "blog:delete_post" post.pk %}" method="post">
-                            {% csrf_token %}
 
-                            <div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="deletePostLabel">Delete Post</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    Do you sure want to delete permanently? <br>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete Permanently</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            </form>
-
-                    </small>
-                   {% endif %}
-                </a>
-                <br>
-                {% if post.excerpt|length < 1 %}
-                    {{ post.description|slice:":200" }}
-                {% else %}
-                    {{ post.excerpt|slice:":200" }}
-                {% endif %}
-            </li>
-        </ul>
-    {% endfor %}
 {% endblock %}

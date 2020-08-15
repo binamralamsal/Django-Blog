@@ -1,90 +1,384 @@
 {% extends 'base.html' %}
-    {% block title %}
+{% load static %}
+{% load categories %}
+{% block title %}
         {% if post.browser_title|length < 1 %}
             {{ post.blog_title }}
         {% else %}
             {{ post.browser_title }}
         {% endif %}
-    {% endblock %}
-    {% block style %}
-        div.row>.col-md-4{
-            color:grey;
-        font-size:14px;
-        }
-    {% endblock %}
+{% endblock %}
 {% block blog_class %}active{% endblock %}
-    {% block content %}
-            <a href="{% url 'blog:home' %}" class="btn btn-primary" style="margin-bottom: 4px;">Back</a>
-        {% if user.id == post.author.id %}
-            <a href="{% url 'blog:update_post' post.pk %}"
-               class="btn btn-primary"
-               style="
-               margin-bottom: 4px;
-               float: right;">
-                Edit Post
-            </a>
-        {% endif %}
-        <h2>{{ post.blog_title }}</h2>
-        <div class="row mt-4">
-            <div class="col-md-3">
-                <p>Category:
-                    {% for cat in post.category.all %}
-                        <a href="{% url "blog:category" cat|slugify %}">{{ cat }}</a>
-                    {% endfor %}
+{% block onload %}sweetAlert(){% endblock %}
 
-                </p>
-            </div>
-            <div class="col-md-3">
-                <p>By: {{ post.author.get_full_name }}</p>
-            </div>
-            <div class="col-md-3">
-                <p>Published Date: {{ post.date_published }}</p>
-        </div>
-            <div class="col-md-3">
-                <form action="{% url 'blog:like_post' post.pk %}" method="post">
-                    {% csrf_token %}
-                    {% if user.is_authenticated %}
-                        <button type="submit" class="btn btn-primary btn-sm" name="post_id" value="{{ post.id }}">
-                            {% if not user in post.likes.all %}
-                                Like
-                            {% else %}
-                                Unlike
+{% block content %}
+   <header id="header">
+			<div id="post-header" class="page-header">
+                <div class="background-img" style="background-image: url('{{ post.featured_image.url }}');"></div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="post-meta">
+                                {% for cat in post.category.all %}
+                                    <a class="post-category cat-2" href="{% url 'blog:category' cat.slug %}">
+                                        {{ cat }}
+                                    </a>
+                                {% endfor %}
+								<span class="post-date">{{ post.date_published }} | <span class="post-category cat-4">{{ post.likes.count }} Likes</span></span>
+
+							</div>
+							<h1>{{ post.blog_title }}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+    <div class="section">
+			<!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- Post content -->
+                <div class="col-md-8">
+                    <div class="section-row sticky-container">
+                        <div class="main-post">
+                            {{ post.description|safe }}
+                        </div>
+                        <div class="post-shares sticky-shares">
+                            <a href="#" class="share-facebook"><i class="fa fa-facebook"></i></a>
+                            <a href="#" class="share-twitter"><i class="fa fa-twitter"></i></a>
+                            <a href="#" class="share-google-plus"><i class="fa fa-google-plus"></i></a>
+                            <a href="#" class="share-pinterest"><i class="fa fa-pinterest"></i></a>
+                            <a href="#" class="share-linkedin"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-envelope"></i></a>
+                            <form action="{% url 'blog:like_post' post.pk %}" method="post">
+                                {% csrf_token %}
+                                {% if user.is_authenticated %}
+                                    <button type="submit" style="margin:0; padding:0; border: none; background-color: transparent;" name="post_id" value="{{ post.id }}">
+                                        {% if not user in post.likes.all %}
+                                            <a class="share-twitter"><i class="material-icons" style="margin-top: 6px;">thumb_up_alt</i></a>
+                                        {% else %}
+                                            <a class="share-pinterest"><i class="material-icons" style="margin-top: 6px;">thumb_down_alt</i></a>
+                                        {% endif %}
+                                    </button>
+                                {% endif %}
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- ad -->
+                    <div class="section-row text-center">
+                        <a href="#" style="display: inline-block;margin: auto;">
+                            <img class="img-responsive" src="{% static 'blog/images/ad-2.jpg' %}" alt="">
+                        </a>
+                    </div>
+                    <!-- ad -->
+
+                    <!-- author -->
+                    <div class="section-row">
+                        <div class="post-author">
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="{% url 'user_auth:profile' post.author.id %}">
+                                        <img class="media-object" src="{{ post.author.profile.profile_pic.url }}" alt="">
+                                    </a>
+                                </div>
+
+                                <div class="media-body">
+                                    <div class="media-heading">
+                                        <h3>
+                                            <a href="{% url 'user_auth:profile' post.author.id %}" style="text-decoration: none;">
+                                                {{ post.author }}
+                                                 {% if post.author.profile.verified %}
+                                                    <span class="material-icons unselectable" style="font-size: 20px; color:#00acee;" data-toggle="tooltip" data-placement="top" title="Verified">verified</span>
+                                                 {% endif %}
+                                                {% if post.author.is_staff %}
+                                                    <span class="material-icons unselectable" unselectable="on" style="font-size: 20px; color:#00acee;" data-toggle="tooltip" data-placement="top" title="Admin">admin_panel_settings</span>
+                                                {% endif %}
+                                            </a>
+                                        </h3>
+                                    </div>
+                                    <p>{{ post.author.profile.bio }}</p>
+                                    <ul class="author-social">
+                                        <li>
+                                            {% if post.author.profile.website_url %}
+                                                <a href="{{ post.author.profile.website_url }}" style="text-decoration: none">Website</a>
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            {% if post.author.profile.facebook %}
+                                                <a href="{{ post.author.profile.facebook }}" class="facebook fa fa-facebook"></a>
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            {% if post.author.profile.twitter %}
+                                                <a href="{{ post.author.profile.twitter }}" class="fa fa-twitter twitel"></a>
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            {% if post.author.profile.instagram %}
+                                                <a href="{{ post.author.profile.instagram }}" class="fa fa-instagram instagram"></a>
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            {% if post.author.profile.youtube %}
+                                                <a href="{{ post.author.profile.youtube }}" class="fa-youtube-play fa youtpint" style="text-decoration: none"></a>
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            {% if post.author.profile.telegram %}
+                                                <a href="{{ post.author.profile.telegram }}" class="fa-telegram fa twitel" style="text-decoration: none"></a>
+                                            {% endif %}
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /author -->
+
+                    <!-- comments -->
+                    <div class="section-row">
+                        <div class="section-title">
+                            <h2>{{ comments.count }} Comments</h2>
+                            {% if user.is_authenticated %}
+                                <form action="{% url 'blog:postcomment' %}" method="post" class="mb-3">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <input type="hidden" name="postID" value="{{ post.id }}">
+                                    <div class="col">
+{#                                            <input type="text" name="comment" placeholder="Type your comment here..." class="input">#}
+                                        <textarea name="comment" id="comment" cols="30" rows="10" placeholder="Type your comment here..." class="input" style="resize: vertical; width: 100%;"></textarea>
+                                    </div>
+                                    <div class="col">
+                                        <input type="submit" class="primary-button" style="width: 100%;">
+                                    </div>
+                                </div>
+                                </form>
                             {% endif %}
-                        </button>
+                        </div>
+
+                        <div class="post-comments">
+                            {% comment %}<div class="media">
+                                <div class="media-left">
+                                    <img class="media-object" src="{% static 'blog/images/avatar.png' %}" alt="">
+                                </div>
+                                <div class="media-body">
+                                    <div class="media-heading">
+                                        <h4>John Doe</h4>
+                                        <span class="time">March 27, 2018 at 8:00 am</span>
+                                        <a href="#" class="reply">Reply</a>
+                                    </div>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+                                    <!-- comment -->
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img class="media-object" src="{% static 'blog/images/avatar.png' %}" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="media-heading">
+                                                <h4>John Doe</h4>
+                                                <span class="time">March 27, 2018 at 8:00 am</span>
+                                                <a href="#" class="reply">Reply</a>
+                                            </div>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                        </div>
+                                    </div>
+                                    <!-- /comment -->
+                                </div>
+                            </div>{% endcomment %}
+                            {% for comment in comments|dictsortreversed:'date_added' %}
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a href="{% url 'user_auth:profile' comment.user.pk %}">
+                                        {% if not comment.user.profle_pic %}
+                                            <img class="media-object" src="{{ comment.user.profile_pic.url }}" alt="" style="object-fit: cover; height: 70px;">
+                                        {% else %}
+                                            <img class="media-object" src="{% static 'blog/images/avatar.png' %}" alt="">
+                                        {% endif %}</a>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="media-heading">
+                                            <h4>{{ comment.user }}
+                                            {% if post.author.profile.verified %}
+                                                    <span class="material-icons unselectable" style="font-size: 20px; color:#00acee;" data-toggle="tooltip" data-placement="top" title="Verified">verified</span>
+                                                 {% endif %}
+                                                {% if post.author.is_staff %}
+                                                    <span class="material-icons unselectable" unselectable="on" style="font-size: 20px; color:#00acee;" data-toggle="tooltip" data-placement="top" title="Admin">admin_panel_settings</span>
+                                                {% endif %}</h4>
+                                            <span class="time">{{ comment.date_added }}</span>
+                                            <a href="#" class="reply">Reply</a>
+                                        </div>
+                                        <p>{{ comment.body }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+
+                            <!-- /comment -->
+                        </div>
+                    </div>
+                    <!-- /comments -->
+
+                    <!-- reply -->
+                    {% if not user.is_authenticated %}
+                        <div class="section-row">
+                        <div class="section-title">
+                            <h2>Leave a reply</h2>
+                            <p>your email address will not be published. required fields are marked *</p>
+                        </div>
+                        <form class="post-reply" method="post" action="{% url 'blog:postcomment' %}">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span>Name *</span>
+                                        <input class="input" type="text" name="name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span>Email *</span>
+                                        <input class="input" type="email" name="email" required>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="postID" value="{{ post.id }}">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <span>Website</span>
+                                        <input class="input" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea class="input" name="comment" placeholder="Message" required></textarea>
+                                    </div>
+                                    <button class="primary-button">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     {% endif %}
-                    {{ post.likes.count }} Likes
-                </form>
-            </div>
-        </div>
-        <hr>
-
-        <p>{{ post.description|safe }}</p>
-        {% if user.id == post.author.id %}
-            <form action="{% url "blog:delete_post" post.pk %}" method="post">
-            {% csrf_token %}
-            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deletePost">
-              Delete
-            </button>
-            <div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="deletePostLabel">Delete Post</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Do you sure want to delete permanently? <br>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger btn-sm">Delete Permanently</button>
-                  </div>
+                    <!-- /reply -->
                 </div>
-              </div>
-            </div>
-            </form>
+                <!-- /Post content -->
 
-        {% endif %}
-    {% endblock %}
+                <!-- aside -->
+                <div class="col-md-4">
+
+                    <!-- Delete button -->
+                    <div class="aside-widget">
+                        <div class="section-title">
+                            <button class="btn btn-danger">Delete Post</button>
+                        </div>
+                    </div>
+                    <!-- /Delete Button -->
+
+                    <!-- ad -->
+                    <div class="aside-widget text-center">
+                        <a href="#" style="display: inline-block;margin: auto;">
+                            <img class="img-responsive" src="{% static 'blog/images/ad-1.jpg' %}" alt="">
+                        </a>
+                    </div>
+                    <!-- /ad -->
+
+                    <!-- post widget -->
+                    <div class="aside-widget">
+                        <div class="section-title">
+                            <h2>Related Posts</h2>
+                        </div>
+                        {% for similar_post in similar_post|slice:':4' %}
+                            {% if not similar_post.id == post.id %}
+                                <div class="post post-widget">
+                                    <a class="post-img" href="{% url 'blog:detail' similar_post.slug similar_post.pk %}"><img src="{{ similar_post.featured_image.url }}" alt=""></a>
+                                    <div class="post-body">
+                                        <h3 class="post-title"><a href="{% url 'blog:detail' similar_post.slug similar_post.pk %}">{{ similar_post.blog_title }}</a></h3>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- /post widget -->
+
+                    <!-- post widget -->
+                    <div class="aside-widget">
+                        <div class="section-title">
+                            <h2>Recent Posts</h2>
+                        </div>
+                        {% for post in recent_posts %}
+                        <div class="post post-thumb">
+                            <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="height: 216px; width: 360px; object-fit: cover"></a>
+                            <div class="post-body">
+                                <div class="post-meta">
+                                    {%  for category in post.category.all %}
+                                        <a class="post-category cat-3" href="{% url 'blog:category' category.slug %}">{{ category }}</a>
+                                    {% endfor %}
+                                    <span class="post-date">{{ post.date_published }}</span>
+                                </div>
+                                <h3 class="post-title"><a href="{% url 'blog:detail' post.slug post.pk %}">{{ post.blog_title }}</a></h3>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- /post widget -->
+
+                    <!-- catagories -->
+                    <div class="aside-widget">
+                        <div class="section-title">
+                            <h2>Catagories</h2>
+                        </div>
+                        <div class="category-widget">
+                            <ul>
+                                {% for category in instance.content|category %}
+                                    {{ category.post.all }}
+                                    <li><a href="{% url 'blog:category' category.slug %}" class="cat-{{ forloop.counter }}">{{ category }}<span>{{ category.all|length }}</span></a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /catagories -->
+
+                    <!-- tags -->
+                    <div class="aside-widget">
+                        <div class="tags-widget">
+                            <ul>
+                                {% if tags %}
+                                    {% for tag in tags %}
+                                        <li><a>#{{ tag }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /tags -->
+
+                    <!-- archive -->
+
+                </div>
+                <!-- /aside -->
+            </div>
+            <!-- /row -->
+        </div>
+			<!-- /container -->
+		</div>
+{{ post.comments.objects.all }}
+{% endblock %}
+{% block script %}
+    function sweetAlert(){
+        {% for message in messages %}
+            swal("{{ message }}", {
+                    icon : "success",
+                    buttons: {
+                        confirm: {
+                            className : 'btn btn-success'
+                        }
+                    },
+                });
+        {% endfor %}
+    }
+{% endblock %}

@@ -1,56 +1,204 @@
 {% extends 'base.html' %}
-{% block title %}KodiBlog{% endblock %}
+{% load static %}
+{% block title %}{{ category_name }}{% endblock %}
 {{% block category_class %}active{% endblock %}
 {% block content %}
     {% if category %}
-        <h3>{{ category_name|title }}</h3>
-    {% for post in category %}
-        <ul>
-            <li>
-                <a href="{% url 'blog:detail' post.slug post.pk %}">
-                    {{ post.blog_title }}
-                   {% if user.id == post.author.id %}
-                        <small>
-                        <a href="{% url 'blog:update_post' post.pk%}" style="float: right; padding: 3px;">
-                            Edit
-                        </a>
-                            <a class="underline" style="float: right; padding: 3px; float: right; color: red; cursor:pointer;" data-toggle="modal" data-target="#deletePost">
-                              Delete
-                            </a>
-                        <form style="display: inline; float: right;" action="{% url "blog:delete_post" post.pk %}" method="post">
-                            {% csrf_token %}
-                            <div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="deletePostLabel">Delete Post</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    Do you sure want to delete permanently? <br>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete Permanently</button>
-                                  </div>
+{#        Page Header #}
+        <div class="page-header">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10">
+							<ul class="page-header-breadcrumb">
+								<li><a href="{% url 'blog:home' %}">Home</a></li>
+								<li>{{ category_name }}</li>
+							</ul>
+							<h1>{{ category_name }}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+
+        <div class="section">
+            <div class="container">
+                <div class="row">
+					<div class="col-md-8">
+						<div class="row">
+							<!-- post -->
+                            {% for post in category.all|dictsortreversed:'date_published'|slice:':1' %}
+                                <div class="col-md-12">
+                                    <div class="post post-thumb">
+                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="width: 616.656px; height: 369.984px; object-fit: cover;"></a>
+                                        <div class="post-body">
+                                            <div class="post-meta">
+                                                {% for category in post.category.all %}
+                                                    <a class="post-category cat-2" href="{% url 'blog:category' category.slug %}">{{ category }}</a>
+                                                {% endfor %}
+                                                <span class="post-date">{{ post.date_published }}</span>
+                                            </div>
+                                            <h3 class="post-title"><a href="{% url 'blog:detail' post.slug post.pk %}">{{ post }}</a></h3>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                            </div>
-                            </form>
-                    </small>
-                   {% endif %}
-                </a>
-                <br>
-                {% if post.excerpt|length < 1 %}
-                    {{ post.description|slice:":200" }}
-                {% else %}
-                    {{ post.excerpt|slice:":200" }}
-                {% endif %}
-            </li>
-        </ul>
-    {% endfor %}
+                            {% endfor %}
+							<!-- /post -->
+
+							<!-- post -->
+                        {% for post in category.all|dictsortreversed:'date_published'|slice:'1:3' %}
+							<div class="col-md-6">
+								<div class="post">
+									<a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="width: 293.328px; height:175.984px; cover-fit:cover;"></a>
+									<div class="post-body">
+										<div class="post-meta">
+                                                {% for category in post.category.all|slice:':3' %}
+                                                    <a class="post-category cat-1" href="{% url 'blog:category' category.slug %}">{{ category }}</a>
+                                                {% endfor %}
+											<span class="post-date">{{ post.date_published }}</span>
+										</div>
+										<h3 class="post-title"><a href="{% url 'blog:detail' post.slug post.pk %}">{{ post }}</a></h3>
+									</div>
+								</div>
+							</div>
+                        {% endfor %}
+							<!-- /post -->
+
+							<div class="clearfix visible-md visible-lg"></div>
+
+							<!-- ad -->
+							<div class="col-md-12">
+								<div class="section-row">
+									<a href="#">
+										<img class="img-responsive center-block" src="{% static 'blog/images/ad-2.jpg' %}" alt="" style="width: 246.656px; height: 147.984px; object-fit: cover;">
+									</a>
+								</div>
+							</div>
+							<!-- ad -->
+
+							<!-- post -->
+                            {% for post in category|dictsortreversed:'date_published'|slice:'3:7' %}
+                                <div class="col-md-12">
+                                    <div class="post post-row">
+                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt=""></a>
+                                        <div class="post-body">
+                                            <div class="post-meta">
+                                                {% for category in post.category.all %}
+                                                    <a class="post-category cat-2" href="{% url 'blog:category' category.pk %}">{{ category }}</a>
+                                                {% endfor %}
+                                                <span class="post-date">{{ post.date_published }}</span>
+                                            </div>
+                                            <h3 class="post-title"><a href="{% url 'blog:detail' post.slug post.pk %}">{{ post.blog_title }}</a></h3>
+                                            <p>{{ post.excerpt }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+							<!-- /post -->
+
+							<div class="col-md-12">
+								<div class="section-row">
+									<button class="primary-button center-block">Load More</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<!-- ad -->
+						<div class="aside-widget text-center">
+							<a href="#" style="display: inline-block;margin: auto;">
+								<img class="img-responsive" src="./img/ad-1.jpg" alt="">
+							</a>
+						</div>
+						<!-- /ad -->
+
+						<!-- post widget -->
+						<div class="aside-widget">
+							<div class="section-title">
+								<h2>Most Read</h2>
+							</div>
+
+							<div class="post post-widget">
+								<a class="post-img" href="blog-post.html"><img src="./img/widget-1.jpg" alt=""></a>
+								<div class="post-body">
+									<h3 class="post-title"><a href="blog-post.html">Tell-A-Tool: Guide To Web Design And Development Tools</a></h3>
+								</div>
+							</div>
+
+							<div class="post post-widget">
+								<a class="post-img" href="blog-post.html"><img src="./img/widget-2.jpg" alt=""></a>
+								<div class="post-body">
+									<h3 class="post-title"><a href="blog-post.html">Pagedraw UI Builder Turns Your Website Design Mockup Into Code Automatically</a></h3>
+								</div>
+							</div>
+
+							<div class="post post-widget">
+								<a class="post-img" href="blog-post.html"><img src="./img/widget-3.jpg" alt=""></a>
+								<div class="post-body">
+									<h3 class="post-title"><a href="blog-post.html">Why Node.js Is The Coolest Kid On The Backend Development Block!</a></h3>
+								</div>
+							</div>
+
+							<div class="post post-widget">
+								<a class="post-img" href="blog-post.html"><img src="./img/widget-4.jpg" alt=""></a>
+								<div class="post-body">
+									<h3 class="post-title"><a href="blog-post.html">Tell-A-Tool: Guide To Web Design And Development Tools</a></h3>
+								</div>
+							</div>
+						</div>
+						<!-- /post widget -->
+
+						<!-- catagories -->
+						<div class="aside-widget">
+							<div class="section-title">
+								<h2>Catagories</h2>
+							</div>
+							<div class="category-widget">
+								<ul>
+									<li><a href="#" class="cat-1">Web Design<span>340</span></a></li>
+									<li><a href="#" class="cat-2">JavaScript<span>74</span></a></li>
+									<li><a href="#" class="cat-4">JQuery<span>41</span></a></li>
+									<li><a href="#" class="cat-3">CSS<span>35</span></a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- /catagories -->
+
+						<!-- tags -->
+						<div class="aside-widget">
+							<div class="tags-widget">
+								<ul>
+									<li><a href="#">Chrome</a></li>
+									<li><a href="#">CSS</a></li>
+									<li><a href="#">Tutorial</a></li>
+									<li><a href="#">Backend</a></li>
+									<li><a href="#">JQuery</a></li>
+									<li><a href="#">Design</a></li>
+									<li><a href="#">Development</a></li>
+									<li><a href="#">JavaScript</a></li>
+									<li><a href="#">Website</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- /tags -->
+
+						<!-- archive -->
+						<div class="aside-widget">
+							<div class="section-title">
+								<h2>Archive</h2>
+							</div>
+							<div class="archive-widget">
+								<ul>
+									<li><a href="#">Jan 2018</a></li>
+									<li><a href="#">Feb 2018</a></li>
+									<li><a href="#">Mar 2018</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- /archive -->
+					</div>
+				</div>
+            </div>
+        </div>
     {% else %}
         Sorry, Posts assigned with this category not found
     {% endif %}

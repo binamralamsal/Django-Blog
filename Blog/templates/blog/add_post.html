@@ -4,9 +4,10 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div class="form-group">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                     {{ form.as_p }}
+                    {{ form.media }}
                 <center>
                     <button class="btn btn-primary">Post</button>
                 </center>

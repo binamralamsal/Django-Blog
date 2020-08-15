@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+{% block register_class %}active{% endblock %}
+{% block edit_profile_class %}active{% endblock %}
+{% block content %}
+    {{ user.profile.bio }}
+    <form action="" method="POST">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+{% endblock %}

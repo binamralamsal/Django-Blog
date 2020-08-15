@@ -5,7 +5,7 @@ from .models import Post
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('blog_title', 'description', 'author', 'browser_title', 'slug', 'excerpt', 'category')
+        fields = ('blog_title', 'description', 'author', 'browser_title', 'slug', 'excerpt', 'category', 'featured_image', 'tags')
         widgets = {
             'blog_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your title here...'}),
             'browser_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your title to show in browser here... Leave blank to show blog title as browser title'}),
@@ -14,14 +14,15 @@ class PostForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter your description here...'}),
             'slug': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your slug here without spaces that will be url of your blog...'}),
             'excerpt': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your excerpt here...'}),
-            'category': forms.CheckboxSelectMultiple(attrs={"style": "list-style:none;"})
+            'category': forms.CheckboxSelectMultiple(attrs={"style": "list-style:none;"}),
+            'tags': forms.TextInput(attrs={"class": "form-control"}),
         }
 
 
 class UpdatePostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('blog_title', 'description', 'browser_title', 'slug', 'excerpt', 'category')
+        fields = ('blog_title', 'description', 'browser_title', 'slug', 'excerpt', 'category', 'featured_image')
         widgets = {
             'blog_title': forms.TextInput(attrs={'class': 'form-control'}),
             'browser_title': forms.TextInput(attrs={'class': 'form-control'}),

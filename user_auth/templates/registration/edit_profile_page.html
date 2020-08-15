@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile Page{% endblock %}
+{% block edit_profile_page_class %}active{% endblock %}
+{% block content %}
+{% if user.profile.id == profile.id %}
+    <div class="form-group">
+    <form method="POST">
+        {% csrf_token %}
+            {{ form.as_p }}
+        <center>
+            <button class="btn btn-primary">Update</button>
+        </center>
+    </form>
+</div>
+{% else %}
+    <p>You are not allowed to edit other profiles</p>
+{% endif %}
+{% endblock %}
