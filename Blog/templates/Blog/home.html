@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'Blog/base.html' %}
+{% load cropping %}
 {% load static %}
 {% load categories %}
 {% block title %}KodiBlog{% endblock %}
@@ -6,14 +7,13 @@
 {% block content %}
     <div class="section">
         <div class="container">
-
             {# Top section #}
             <div class="row">
                 {% for post in posts|dictsortreversed:'ordering_date'|slice:':2' %}
                     <div class="col-md-6">
                         <div class="post post-thumb">
                             {% if post.featured_image.url %}
-                                <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="object-fit: cover; height: 333px; width:555px;"></a>
+                                <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                             {% endif %}
                             <div class="post-body">
                                 <div class="post-meta">
@@ -43,7 +43,7 @@
                 <div class="col-md-4">
                     <div class="post">
 
-                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="object-fit: cover; height: 216px; width:350px;"></a>
+                        <a class="post-img post-img-normal" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                         <div class="post-body">
                             <div class="post-meta">
                                 {% with counter=forloop.counter %}
@@ -69,7 +69,7 @@
                         {% for post in posts|dictsortreversed:'date_published'|slice:'8:9' %}
                             <div class="col-md-12">
                                 <div class="post post-thumb">
-                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="height: 450px; width: 750px; object-fit: cover;"></a>
+                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                     <div class="post-body">
                                         <div class="post-meta">
                                             {% for category in post.category.all %}
@@ -90,7 +90,7 @@
                         {% for post in posts|dictsortreversed:'date_published'|slice:'9:15' %}
                             <div class="col-md-6">
                                 <div class="post">
-                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="object-fit: cover; height: 216px; width:360px;"></a>
+                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                     <div class="post-body">
                                         <div class="post-meta">
                                             {% with counter=forloop.counter %}
@@ -120,7 +120,7 @@
                         {% for post in programming|dictsortreversed:'date_published'|slice:':4' %}
                             <div class="post post-widget">
                                 {% if post.featured_image.url %}
-                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="height: 90px; width: 90px; object-fit: cover;"></a>
+                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                 {% endif %}
                                 <div class="post-body">
                                     <h3 class="post-title"><a href="{% url 'blog:detail' post.slug post.pk %}">{{ post }}</a></h3>
@@ -138,7 +138,7 @@
                         </div>
                         {% for post in entertainment|dictsortreversed:'date_published'|slice:':2' %}
                             <div class="post post-thumb">
-                                <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="height: 216px; width: 360px; object-fit: cover"></a>
+                                <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                 <div class="post-body">
                                     <div class="post-meta">
                                         {% for category in post.category.all %}
@@ -156,7 +156,7 @@
                     <!-- ad -->
                     <div class="aside-widget text-center">
                         <a href="#" style="display: inline-block;margin: auto;">
-                            <img class="img-responsive" src="{% static 'blog/images/ad-1.jpg' %}" alt="" style="object-fit: cover; height: 250px; width: 300px;">
+                            <img class="img-responsive" src="{% static 'blog/images/ad-1.jpg' %}" alt="">
                         </a>
                     </div>
 
@@ -181,7 +181,7 @@
                         <div class="col-md-4">
                             <div class="post">
                                 {% if post.featured_image.url %}
-                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="height: 216px; width: 360px; object-fit: cover"></a>
+                                    <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                 {% endif %}
                                 <div class="post-body">
                                     <div class="post-meta">
@@ -220,7 +220,7 @@
                             {% for post in posts|dictsortreversed:'date_published'|slice:'15:19' %}
                                 <div class="col-md-12">
                                     <div class="post post-row">
-                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="height: 180px; width: 300px; object-fit: cover"></a>
+                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                         <div class="post-body">
                                             <div class="post-meta">
                                                 {% for category in post.category.all %}
@@ -250,7 +250,7 @@
 						<!-- ad -->
 						<div class="aside-widget text-center">
 							<a href="#" style="display: inline-block;margin: auto;">
-								<img class="img-responsive" src="{% static 'blog/images/ad-1.jpg' %}" alt="" style="height: 250px; width: 300px; object-fit: cover">
+								<img class="img-responsive" src="{% static 'blog/images/ad-1.jpg' %}" alt="">
 							</a>
 						</div>
 						<!-- /ad -->

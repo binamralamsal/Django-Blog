@@ -1,5 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'Blog/base.html' %}
 {% load static %}
+{% load cropping %}
 {% load categories %}
 {% block title %}
         {% if post.browser_title|length < 1 %}
@@ -295,7 +296,7 @@
                         {% for similar_post in similar_post|slice:':4' %}
                             {% if not similar_post.id == post.id %}
                                 <div class="post post-widget">
-                                    <a class="post-img" href="{% url 'blog:detail' similar_post.slug similar_post.pk %}"><img src="{{ similar_post.featured_image.url }}" alt=""></a>
+                                    <a class="post-img" href="{% url 'blog:detail' similar_post.slug similar_post.pk %}"><img src="{% cropped_thumbnail similar_post "cropping" %}" alt=""></a>
                                     <div class="post-body">
                                         <h3 class="post-title"><a href="{% url 'blog:detail' similar_post.slug similar_post.pk %}">{{ similar_post.blog_title }}</a></h3>
                                     </div>
@@ -312,7 +313,7 @@
                         </div>
                         {% for post in recent_posts %}
                         <div class="post post-thumb">
-                            <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="height: 216px; width: 360px; object-fit: cover"></a>
+                            <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                             <div class="post-body">
                                 <div class="post-meta">
                                     {%  for category in post.category.all %}
@@ -366,7 +367,7 @@
         </div>
 			<!-- /container -->
 		</div>
-{{ post.comments.objects.all }}
+
 {% endblock %}
 {% block script %}
     function sweetAlert(){

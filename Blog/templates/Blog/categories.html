@@ -1,5 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'Blog/base.html' %}
 {% load static %}
+{% load cropping %}
 {% block title %}{{ category_name }}{% endblock %}
 {{% block category_class %}active{% endblock %}
 {% block content %}
@@ -28,7 +29,7 @@
                             {% for post in category.all|dictsortreversed:'date_published'|slice:':1' %}
                                 <div class="col-md-12">
                                     <div class="post post-thumb">
-                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="width: 616.656px; height: 369.984px; object-fit: cover;"></a>
+                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                         <div class="post-body">
                                             <div class="post-meta">
                                                 {% for category in post.category.all %}
@@ -47,7 +48,7 @@
                         {% for post in category.all|dictsortreversed:'date_published'|slice:'1:3' %}
 							<div class="col-md-6">
 								<div class="post">
-									<a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt="" style="width: 293.328px; height:175.984px; cover-fit:cover;"></a>
+									<a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
 									<div class="post-body">
 										<div class="post-meta">
                                                 {% for category in post.category.all|slice:':3' %}
@@ -68,7 +69,7 @@
 							<div class="col-md-12">
 								<div class="section-row">
 									<a href="#">
-										<img class="img-responsive center-block" src="{% static 'blog/images/ad-2.jpg' %}" alt="" style="width: 246.656px; height: 147.984px; object-fit: cover;">
+										<img class="img-responsive center-block" src="{% static 'blog/images/ad-2.jpg' %}" alt="">
 									</a>
 								</div>
 							</div>
@@ -78,7 +79,7 @@
                             {% for post in category|dictsortreversed:'date_published'|slice:'3:7' %}
                                 <div class="col-md-12">
                                     <div class="post post-row">
-                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{{ post.featured_image.url }}" alt=""></a>
+                                        <a class="post-img" href="{% url 'blog:detail' post.slug post.pk %}"><img src="{% cropped_thumbnail post "cropping" %}" alt=""></a>
                                         <div class="post-body">
                                             <div class="post-meta">
                                                 {% for category in post.category.all %}

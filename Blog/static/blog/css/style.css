@@ -955,6 +955,7 @@ RESPONSIVE
 	RESPONSIVE
 ===========================================================*/
  @media only screen and (max-width: 991px) {
+
      #nav .nav-menu {
          display: none;
     }
@@ -976,4 +977,7 @@ RESPONSIVE
      .post.post-row .post-body p {
          display:none;
     }
+     .post-img-normal{
+         width: 100% !important;
+     }
 }

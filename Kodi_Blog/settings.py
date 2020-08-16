@@ -38,8 +38,14 @@ INSTALLED_APPS = [
     'Blog.apps.BlogConfig',
     'user_auth.apps.UserAuthConfig',
     'ckeditor',
-    'debug_toolbar'
+    'easy_thumbnails',
+    'image_cropping',
+    'easy_thumbnails.optimize',
 ]
+from easy_thumbnails.conf import Settings as thumbnail_settings
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'Kodi_Blog.urls'
@@ -129,10 +134,8 @@ STATIC_FILES_DIRS = [
     os.path.join('BASE_DIR', 'static')
 ]
 
-
 LOGIN_REDIRECT_URL = "blog:home"
 LOGOUT_REDIRECT_URL = "blog:home"
-
 
 CKEDITOR_CONFIGS = {
     'default': {
@@ -144,9 +147,9 @@ CKEDITOR_CONFIGS = {
             ['Image', 'Flash', 'Table', 'HorizontalRule'],
             ['TextColor', 'BGColor'],
             ['Smiley', 'SpecialChar'], ['Source'],
-            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-            ['NumberedList','BulletedList'],
-            ['Indent','Outdent'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['NumberedList', 'BulletedList'],
+            ['Indent', 'Outdent'],
             ['Maximize'],
         ],
         'extraPlugins': 'justify,liststyle,indent',

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from image_cropping import ImageCroppingMixin, ImageCropWidget
 from .models import Post, Category, Profile, Comment
 
 
@@ -7,7 +8,11 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('category',)}
 
 
-class BlogAdmin(admin.ModelAdmin):
+class BlogAdmin(ImageCroppingMixin, admin.ModelAdmin):
+    class Meta:
+        widgets = {
+            'image': ImageCropWidget,
+        }
     list_display = ('blog_title', 'id', 'date_published', 'author', 'slug')
     list_filter = ('category',)
     search_fields = ('blog_title', 'date_published')
@@ -15,7 +20,7 @@ class BlogAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('blog_title', 'description', 'author', 'category', 'excerpt', 'featured_image')
+            'fields': ('blog_title', 'description', 'author', 'category', 'excerpt', 'featured_image', 'cropping')
         }),
         ('Advanced options', {
             'classes': ('collapse',),

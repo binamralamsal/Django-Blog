@@ -1,8 +1,10 @@
+from PIL import Image
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from ckeditor.fields import RichTextField
+from image_cropping import ImageRatioField, ImageCropField
 
 
 class Category(models.Model):
@@ -21,6 +23,7 @@ class Post(models.Model):
     description = RichTextField(blank=True, null=True)
     featured_image = models.ImageField(blank=True, null=True, upload_to="images/", default='blog/images/author'
                                                                                            '.png')
+    cropping = ImageRatioField('featured_image', '750x450')
     date_published = models.DateField(default=timezone.now)
     ordering_date = models.DateTimeField(default=timezone.now)
     slug = models.SlugField(max_length=250)
@@ -35,6 +38,14 @@ class Post(models.Model):
     def get_absolute_url(self):
         print(self.id)
         return reverse('blog:home')
+
+    def save(self, *args, **kwargs):
+        super().save()
+        img = Image.open(self.featured_image.path)
+        if img.height > 450 or img.width > 750:
+            output_size = (750, 450)
+            img.thumbnail(output_size)
+            img.save(self.featured_image.path)
 
 
 class Profile(models.Model):
