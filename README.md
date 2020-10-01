@@ -1,3 +1,4 @@
+a simple blog
 # My-simple-blog
 This is a simple blog website created using django, python, HTML, CSS, etc. I have created this project so that I can learn django. You can also contribute in this project if you want.   
 
